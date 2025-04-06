@@ -28,5 +28,5 @@ while [ $counter -lt 20 ]; do
 done
 
 # If we reach here, it means the ping failed after 20 attempts
-echo "Failed to ping google.com after 20 seconds."
+echo "Failed to ping google.com after 20 seconds. Double check WiFi or rerun."
 exit 1
