@@ -13,8 +13,11 @@ echo "Current IP address: $current_ip"
 # Filter out devices on the same subnet (you can modify the network part as needed)
 connected_devices=$(arp -n | grep "$network" | awk '{print $1}')
 
-# Count the number of connected devices
-device_count=$(echo "$connected_devices" | wc -l)
+# Add the current device IP to the list of connected devices
+connected_devices="$current_ip $connected_devices"
+
+# Count the number of connected devices, including the current device
+device_count=$(echo "$connected_devices" | wc -w)
 
 # Display the number of connected devices
 echo "Number of devices connected to the Ad-Hoc network: $device_count"
