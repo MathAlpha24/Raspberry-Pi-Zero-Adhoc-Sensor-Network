@@ -1,3 +1,5 @@
+# Disable Wifi for Adhoc
+
 sudo systemctl stop wpa_supplicant
 
 sudo systemctl disable wpa_supplicant
@@ -21,3 +23,11 @@ sudo ip addr add 192.168.2.x/24 dev wlan0 # Each Pi needs a diffrent address 192
 iw dev wlan0 info
 
 ping 192.168.2.x
+
+
+# Enable WiFi
+
+sudo systemctl enable NetworkManager
+
+sudo systemctl start NetworkManager
+
