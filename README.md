@@ -31,3 +31,8 @@ sudo systemctl enable NetworkManager
 
 sudo systemctl start NetworkManager
 
+# Reboot
+
+sudo reboot
+
+
