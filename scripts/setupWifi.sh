@@ -13,7 +13,7 @@ counter=0
 while [ $counter -lt 20 ]; do
     # Ping google.com with 1 second timeout and suppress output
     if ping -c 1 -W 1 google.com > /dev/null 2>&1; then
-        echo "Successfully connected to google.com!"
+        echo "Successfully ping google.com!"
         exit 0
     fi
     
@@ -28,5 +28,5 @@ while [ $counter -lt 20 ]; do
 done
 
 # If we reach here, it means the ping failed after 20 attempts
-echo "Failed to connect to google.com after 20 seconds."
+echo "Failed to ping google.com after 20 seconds."
 exit 1
