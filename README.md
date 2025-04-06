@@ -37,4 +37,9 @@ ping -c 3 google.com
 
 sudo reboot
 
+# Clone
+
+git clone -b ping https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git
+
+
 
