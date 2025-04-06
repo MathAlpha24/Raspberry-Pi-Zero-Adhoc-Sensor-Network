@@ -16,7 +16,7 @@ def blink_led():
 # Function to listen for pings in the background
 def ping_listener():
     while True:
-        response = os.system("ping -c 1 192.168.2.2")  # Replace with Pi's IP address (192.168.2.x)
+        response = os.system("ping -c 1 192.168.1.2")  # Replace with Pi's IP address (192.168.2.x)
         if response == 0:
             print("Ping received!")
             blink_led()
