@@ -3,7 +3,7 @@
 # Check if argument is provided
 if [ -z "$1" ]; then
   echo "Usage: $0 <number>"
-  echo "Example: $0 5 will set IP 192.168.4.5/24"
+  echo "Example: $0 5 will set IP 192.168.2.5/24"
   exit 1
 fi
 
