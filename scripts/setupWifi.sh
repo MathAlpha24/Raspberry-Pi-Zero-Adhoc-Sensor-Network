@@ -6,12 +6,24 @@ sudo systemctl enable NetworkManager
 # Start NetworkManager service
 sudo systemctl start NetworkManager
 
-# Test the network connection by pinging google.com
-ping -c 3 google.com
+# Initialize counter for timeout
+counter=0
 
-# Check if the ping was successful
-if [ $? -eq 0 ]; then
-  echo "Network is working, successfully pinged google.com."
-else
-  echo "Network is not working, failed to ping google.com."
-fi
+# Try to ping google.com every 1 second, timeout after 20 seconds
+while [ $counter -lt 20 ]; do
+    # Ping google.com with 1 second timeout and suppress output
+    if ping -c 1 -W 1 google.com > /dev/null 2>&1; then
+        echo "Successfully connected to google.com!"
+        exit 0
+    fi
+    
+    # Increment counter
+    ((counter++))
+    
+    # Wait for 1 second before retrying
+    sleep 1
+done
+
+# If we reach here, it means the ping failed after 20 attempts
+echo "Failed to connect to google.com after 20 seconds."
+exit 1
