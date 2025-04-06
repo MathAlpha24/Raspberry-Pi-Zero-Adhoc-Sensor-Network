@@ -10,7 +10,7 @@ sudo iw wlan0 set type ibss
 
 sudo iw wlan0 ibss join PiAdHocNet 2412
 sudo ip link set wlan0 up
-sudo ip addr add 192.168.2.x/24 dev wlan0 # Each Pi needs a diffrent address
+sudo ip addr add 192.168.2.x/24 dev wlan0 # Each Pi needs a diffrent address 192.168.2.2 then 192.168.2.3 then 192.168.2.4
 
 iw dev wlan0 info
 
