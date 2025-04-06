@@ -18,8 +18,11 @@ while [ $counter -lt 20 ]; do
     fi
     
     # Increment counter
-    ((counter++))
+    counter=$((counter + 1))
     
+    # Display the current counter value
+    echo "Attempt #$counter to ping google.com"
+
     # Wait for 1 second before retrying
     sleep 1
 done
