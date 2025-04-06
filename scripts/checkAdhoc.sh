@@ -22,10 +22,12 @@ device_count=$(echo "$connected_devices" | wc -w)
 # Display the number of connected devices
 echo "Number of devices connected to the Ad-Hoc network: $device_count"
 
-# Display the exact IP addresses
+# Display the exact IP addresses on separate lines
 if [ $device_count -gt 0 ]; then
     echo "IP Addresses of connected devices:"
-    echo "$connected_devices"
+    for ip in $connected_devices; do
+        echo "$ip"
+    done
 else
     echo "No devices found on the Ad-Hoc network."
 fi
