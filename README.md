@@ -31,6 +31,8 @@ sudo systemctl enable NetworkManager
 
 sudo systemctl start NetworkManager
 
+ping -c 3 google.com
+
 # Reboot
 
 sudo reboot
