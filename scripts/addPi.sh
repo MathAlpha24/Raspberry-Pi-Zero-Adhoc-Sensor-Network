@@ -1,32 +1,41 @@
 #!/bin/bash
 
-# Check if argument is provided
+# Check if an argument is provided
 if [ -z "$1" ]; then
-  echo "Usage: $0 <number>"
-  echo "Example: $0 5 will set IP 192.168.2.5/24"
-  exit 1
+    echo "Usage: $0 <last-octet>"
+    exit 1
 fi
 
-# Variables
-ESSID="PiAdHoc"           # ESSID for the ad hoc network
-CHANNEL=1                  # Channel for the ad hoc network
-IP_ADDRESS="192.168.4.$1"  # IP address based on the provided argument
+# Set the IP address based on the argument
+IP="192.168.2.$1/24"
 
-# Disable wlan0 interface
+# Stop and disable NetworkManager
+echo "Stopping and disabling NetworkManager..."
+sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
+
+# Bring down and up the wlan0 interface
+echo "Bringing down wlan0..."
 sudo ip link set wlan0 down
-
-# Set wlan0 to ad-hoc mode
-sudo iwconfig wlan0 mode ad-hoc
-
-# Set ESSID and channel
-sudo iwconfig wlan0 essid "$ESSID"
-sudo iwconfig wlan0 channel "$CHANNEL"
-
-# Assign IP address to wlan0
-sudo ip addr add "$IP_ADDRESS"/24 dev wlan0
-
-# Enable wlan0 interface
+echo "Bringing up wlan0..."
 sudo ip link set wlan0 up
 
-# Display wlan0 information
+# Set wlan0 to IBSS mode
+echo "Setting wlan0 to IBSS mode..."
+sudo iw wlan0 set type ibss
+
+# Join the PiAdHocNet network
+echo "Joining PiAdHocNet on channel 2412..."
+sudo iw wlan0 ibss join PiAdHocNet 2412
+
+# Assign the IP address to wlan0
+echo "Assigning IP address $IP to wlan0..."
+sudo ip addr add $IP dev wlan0
+
+# Bring wlan0 back up
+echo "Bringing wlan0 up..."
+sudo ip link set wlan0 up
+
+# Display wlan0 info
+echo "Displaying wlan0 info..."
 iw dev wlan0 info
