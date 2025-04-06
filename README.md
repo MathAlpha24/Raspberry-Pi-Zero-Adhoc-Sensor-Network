@@ -41,5 +41,7 @@ sudo reboot
 
 git clone -b ping https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git
 
+git branch
 
+git pull origin ping
 
