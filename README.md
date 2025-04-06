@@ -4,6 +4,7 @@ sudo systemctl stop NetworkManager
 sudo systemctl disable NetworkManager
 
 sudo ip link set wlan0 down
+sudo ip link set wlan0 up
 
 sudo iw wlan0 set type ibss
 
