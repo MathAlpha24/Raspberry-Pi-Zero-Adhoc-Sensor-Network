@@ -1,0 +1,9 @@
+Done:
+Ad Hoc Bash Scripts
+
+Need to be completed:
+- DHT11 test script -> making sure DTH11 can be access by the same pi
+- Script to retrieve some test data from another pi
+- Script to retrieve DTH11 data from another pi
+
+Finding power consumption of pi + DTH11 will come later.
