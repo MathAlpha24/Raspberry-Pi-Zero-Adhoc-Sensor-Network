@@ -65,16 +65,25 @@ sudo ip link set wlan0 up
 echo "wlan0 is up and connected. IP assigned: $IP"
 iw dev wlan0 info
 
-# === 4. Run the Sender Script ===
-# The sender script should be in the current directory
-echo "Running sender script..."
+# === 4. Run the Python DHT11 Sender Script ===
+echo "📤 Running DHT11 sender Python script..."
 
 # Default GPIO pin for DHT11 (can be passed as the second argument)
 GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
 
-# Run the sender script (ensure it is executable)
-chmod +x sender_pi_setup.sh
-./sender_pi_setup.sh --data "$GPIO_PIN"
+# Clone or update the project repo if not already done
+cd "$PROJECT_DIR"
+if [ ! -d "Raspberry-Pi-Zero-Adhoc-Sensor-Network" ]; then
+    git clone -b adhoc_tst https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git
+else
+    cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
+    git pull origin adhoc_tst
+    cd ..
+fi
 
-# Optional: deactivate the virtual environment after execution (if needed)
+# Go to the script folder and run the sender script
+cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
+python3 dht11_sender.py --data "$GPIO_PIN"
+
+# Optional: deactivate virtual environment after execution
 deactivate
