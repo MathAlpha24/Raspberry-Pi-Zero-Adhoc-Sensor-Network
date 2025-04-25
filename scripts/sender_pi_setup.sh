@@ -9,12 +9,27 @@ echo "📦 Installing required dependencies..."
 sudo apt update
 sudo apt install -y python3 python3-venv python3-pip git iw
 
-# Install Python dependencies (Adafruit DHT and others)
-echo "Installing Python packages..."
-pip3 install --upgrade pip  # Make sure pip is up to date
-pip3 install Adafruit_DHT
+# === 2. Set Up the Virtual Environment ===
+echo "🌱 Setting up virtual environment..."
 
-# === 2. Set Up the Ad-Hoc Network ===
+# Create project directory and set up virtual environment
+PROJECT_DIR=~/sensor_project
+VENV_DIR=$PROJECT_DIR/venv
+
+# Create project directory if it doesn't exist
+mkdir -p "$PROJECT_DIR"
+cd "$PROJECT_DIR"
+
+# Create and activate the virtual environment
+python3 -m venv "$VENV_DIR"
+source "$VENV_DIR/bin/activate"
+
+# Update pip and install Python dependencies inside the virtual environment
+echo "Installing Python packages inside the virtual environment..."
+pip install --upgrade pip  # Make sure pip is up to date
+pip install Adafruit_DHT
+
+# === 3. Set Up the Ad-Hoc Network ===
 echo "📡 Setting up ad hoc Wi-Fi network..."
 
 # Make sure you have the last octet as the first argument
@@ -49,7 +64,7 @@ sudo ip link set wlan0 up
 echo "✅ wlan0 is up and connected. IP assigned: $IP"
 iw dev wlan0 info
 
-# === 3. Run the Sender Script ===
+# === 4. Run the Sender Script ===
 # The sender script should be in the current directory
 echo "🚀 Running sender script..."
 
