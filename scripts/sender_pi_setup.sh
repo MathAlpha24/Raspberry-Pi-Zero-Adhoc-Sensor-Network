@@ -1,82 +1,64 @@
 #!/bin/bash
 
-set -e  # Exit immediately if any command fails
+set -e  # Exit on any error
 
-# === 0. IP and GPIO Config ===
+# === 1. Install Required Libraries ===
+echo "📦 Installing required dependencies..."
+
+# Update package list and install necessary tools and libraries
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip git iw
+
+# Install Python dependencies (Adafruit DHT and others)
+echo "Installing Python packages..."
+pip3 install --upgrade pip  # Make sure pip is up to date
+pip3 install Adafruit_DHT
+
+# === 2. Set Up the Ad-Hoc Network ===
+echo "📡 Setting up ad hoc Wi-Fi network..."
+
+# Make sure you have the last octet as the first argument
 if [ -z "$1" ]; then
-    echo "Usage: $0 <last-octet-of-IP> [gpio-pin]"
+    echo "Usage: $0 <last-octet-of-IP>"
     exit 1
 fi
 
 LAST_OCTET=$1
 IP="192.168.2.$LAST_OCTET/24"
-GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
 
-# === 1. Ad Hoc Wi-Fi Setup ===
-echo "📡 Setting up ad hoc Wi-Fi network..."
-
+# Stop NetworkManager and set up the ad-hoc network
 echo "Stopping NetworkManager..."
-sudo systemctl stop NetworkManager || true
-sudo systemctl disable NetworkManager || true
+sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
 
-echo "Restarting wlan0..."
-sudo ip link set wlan0 down || true
+# Bring down and set up wlan0 in IBSS (ad-hoc) mode
+echo "Bringing down wlan0..."
+sudo ip link set wlan0 down
 sudo iw wlan0 set type ibss
 sudo ip link set wlan0 up
 
 echo "Joining ad hoc network PiAdHocNet on channel 2412..."
 sudo iw wlan0 ibss join PiAdHocNet 2412
 
-echo "Assigning IP: $IP"
+# Assign the IP address
+echo "Assigning IP address: $IP"
 sudo ip addr flush dev wlan0
 sudo ip addr add "$IP" dev wlan0
+sudo ip link set wlan0 up
 
-echo "✅ wlan0 status:"
-iw dev wlan0 info || true
+echo "✅ wlan0 is up and connected. IP assigned: $IP"
+iw dev wlan0 info
 
-# === 2. Project and VENV Setup ===
-PROJECT_DIR=~/sensor_project
-VENV_DIR=$PROJECT_DIR/venv
-GIT_REPO="https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git"
-GIT_BRANCH="adhoc_tst"
-PYTHON_SCRIPT="dht11_sender.py"
+# === 3. Run the Sender Script ===
+# The sender script should be in the current directory
+echo "🚀 Running sender script..."
 
-echo "📁 Creating project directory and installing dependencies..."
-sudo apt update
-sudo apt install -y python3 python3-venv python3-pip git
+# Default GPIO pin for DHT11 (can be passed as the second argument)
+GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
 
-mkdir -p "$PROJECT_DIR"
-cd "$PROJECT_DIR"
+# Run the sender script (ensure it is executable)
+chmod +x sender_pi_setup.sh
+./sender_pi_setup.sh --data "$GPIO_PIN"
 
-if [ ! -d "$VENV_DIR" ]; then
-    echo "🌱 Creating new virtual environment..."
-    python3 -m venv venv
-else
-    echo "📦 Virtual environment already exists."
-fi
-
-echo "🌱 Activating venv..."
-source "$VENV_DIR/bin/activate"
-
-# === 3. Install Adafruit_DHT if needed ===
-echo "📦 Checking for Adafruit_DHT..."
-python3 -c "import Adafruit_DHT" 2>/dev/null || {
-    echo "Installing Adafruit_DHT..."
-    pip install Adafruit_DHT
-}
-
-# === 4. Clone Repo and Run Script ===
-echo "⬇️ Cloning project repo..."
-cd "$PROJECT_DIR"
-rm -rf Raspberry-Pi-Zero-Adhoc-Sensor-Network
-git clone -b "$GIT_BRANCH" "$GIT_REPO" || {
-    echo "❌ Git clone failed. Check your branch or internet."
-    exit 1
-}
-cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
-
-echo "🚀 Running DHT11 sender script on GPIO $GPIO_PIN..."
-python3 "$PYTHON_SCRIPT" --data "$GPIO_PIN"
-
-# === 5. Cleanup ===
+# Optional: deactivate the virtual environment after execution (if needed)
 deactivate
