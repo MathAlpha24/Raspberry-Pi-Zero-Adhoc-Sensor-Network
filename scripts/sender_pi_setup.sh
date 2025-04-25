@@ -3,14 +3,14 @@
 set -e  # Exit on any error
 
 # === 1. Install Required Libraries ===
-echo "📦 Installing required dependencies..."
+echo "Installing required dependencies..."
 
 # Update package list and install necessary tools and libraries
 sudo apt update
-sudo apt install -y python3 python3-venv python3-pip git iw
+sudo apt install -y python3 python3-venv python3-pip git iw build-essential python3-dev libgpiod2
 
 # === 2. Set Up the Virtual Environment ===
-echo "🌱 Setting up virtual environment..."
+echo "Setting up virtual environment..."
 
 # Create project directory and set up virtual environment
 PROJECT_DIR=~/sensor_project
@@ -26,8 +26,9 @@ source "$VENV_DIR/bin/activate"
 
 # Update pip and install Python dependencies inside the virtual environment
 echo "Installing Python packages inside the virtual environment..."
-pip install --upgrade pip  # Make sure pip is up to date
-pip install Adafruit_DHT
+pip install --upgrade pip
+pip install adafruit-circuitpython-dht
+pip install RPI.GPIO
 
 # === 3. Set Up the Ad-Hoc Network ===
 echo "📡 Setting up ad hoc Wi-Fi network..."
@@ -61,12 +62,12 @@ sudo ip addr flush dev wlan0
 sudo ip addr add "$IP" dev wlan0
 sudo ip link set wlan0 up
 
-echo "✅ wlan0 is up and connected. IP assigned: $IP"
+echo "wlan0 is up and connected. IP assigned: $IP"
 iw dev wlan0 info
 
 # === 4. Run the Sender Script ===
 # The sender script should be in the current directory
-echo "🚀 Running sender script..."
+echo "Running sender script..."
 
 # Default GPIO pin for DHT11 (can be passed as the second argument)
 GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
