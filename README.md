@@ -1,47 +1,60 @@
-# Disable Wifi for Adhoc
+# How to clone repo
 
-sudo systemctl stop wpa_supplicant
-
-sudo systemctl disable wpa_supplicant
-
-sudo systemctl stop NetworkManager
-
-sudo systemctl disable NetworkManager
-
-sudo ip link set wlan0 down
-
-sudo ip link set wlan0 up
-
-sudo iw wlan0 set type ibss
-
-sudo iw wlan0 ibss join PiAdHocNet 2412
-
-sudo ip link set wlan0 up
-
-sudo ip addr add 192.168.2.x/24 dev wlan0 # Each Pi needs a diffrent address 192.168.2.2 then 192.168.2.3 then 192.168.2.4
-
-iw dev wlan0 info
-
-ping 192.168.2.x
-
-
-# Enable WiFi
-
-sudo systemctl enable NetworkManager
-
-sudo systemctl start NetworkManager
-
-ping -c 3 google.com
-
-# Reboot
-
-sudo reboot
-
-# Clone
-
+Clone repo
+```shell
 git clone -b ping https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git
-
+```
+Check branch
+```shell
 git branch
-
+```
+Pull changes from branch
+```shell
 git pull origin ping
+```
+# Scripts
+## Add Pi, this will also disable WiFi
+Go to scripts directory
+```shell
+cd ~/Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts
+```
+Usage example: sh addPi.sh 5
+
+This will set IP="192.168.2.**5**/24"
+
+Usage example: sh addPi.sh 2
+
+This will set IP="192.168.2.**2**/24"
+```shell
+sh addPi.sh <last-octet>
+```
+## Delete Pi
+Go to scripts directory
+```shell
+cd ~/Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts
+```
+Usage example: sh delPi.sh 5
+
+This will remove IP: 192.168.2.**5**/24 from ad-hoc
+
+Usage example: sh delPi.sh 2
+
+This will remove IP: 192.168.2.**2**/24 from ad-hoc
+```shell
+sh delPi.sh <last-octet>
+```
+## Check Ad-hoc
+This will list all the IPs on ad-hoc
+```shell
+sh checkAdhoc.sh
+```
+## Setup WiFi
+This will setup WiFi
+```shell
+sh setupWifi.sh
+```
+# Reboot Pi
+```shell
+sudo reboot
+```
 
