@@ -45,6 +45,10 @@ sh delPi.sh <last-octet>
 ```
 ## Check Ad-hoc
 This will list all the IPs on ad-hoc
+
+Make sure it lists only IPs of 192.168.2.**x**/24
+
+If you something else, this is the Ip assigned by WiFi
 ```shell
 sh checkAdhoc.sh
 ```
