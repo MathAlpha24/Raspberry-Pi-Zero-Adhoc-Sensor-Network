@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#Script exists to set up a pi with a DHT11 for the first time.
+#Creates all dependecies + starts ADHOC and DHT11 data collection
 set -e  # Exit on any error
 
 # === 1. Install Required Libraries ===
@@ -71,15 +72,6 @@ echo "📤 Running DHT11 sender Python script..."
 # Default GPIO pin for DHT11 (can be passed as the second argument)
 GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
 
-# Clone or update the project repo if not already done
-cd "$PROJECT_DIR"
-if [ ! -d "Raspberry-Pi-Zero-Adhoc-Sensor-Network" ]; then
-    git clone -b adhoc_tst https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git
-else
-    cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
-    git pull origin adhoc_tst
-    cd ..
-fi
 
 # Go to the script folder and run the sender script
 cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
