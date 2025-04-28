@@ -48,7 +48,7 @@ This will list all the IPs on ad-hoc
 
 Make sure it lists only IPs of 192.168.2.**x**/24
 
-If you something else, this is the Ip assigned by WiFi
+If you something else, this is the IP assigned by WiFi
 ```shell
 sh checkAdhoc.sh
 ```
@@ -61,4 +61,11 @@ sh setupWifi.sh
 ```shell
 sudo reboot
 ```
+# Files
+Within /boot/firmware/config.txt
+add this line at the end:
+```shell
+dtoverlay=dht11,gpiopin=4
+```
+This will correspond to GPIO 4, this can be changed to any other GPIO pin
 
