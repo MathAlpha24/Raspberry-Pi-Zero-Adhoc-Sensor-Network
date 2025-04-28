@@ -67,5 +67,9 @@ add this line at the end:
 ```shell
 dtoverlay=dht11,gpiopin=4
 ```
+By using:
+```shell
+sudo nano /boot/firmware/config.txt
+```
 This will correspond to GPIO 4, this can be changed to any other GPIO pin
 
