@@ -5,7 +5,7 @@ set -e  # Exit on any error
 # === 1. Set Up Virtual Environment ===
 echo "Setting up virtual environment..."
 
-PROJECT_DIR=~/sensor_project
+PROJECT_DIR=~/receiver_project
 VENV_DIR=$PROJECT_DIR/venv
 
 mkdir -p "$PROJECT_DIR"
