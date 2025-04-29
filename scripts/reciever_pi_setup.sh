@@ -29,6 +29,18 @@ source "$VENV_DIR/bin/activate"
 echo "Installing Python packages inside the virtual environment..."
 pip install --upgrade pip
 
+# Clone the project if it's not already in the directory
+if [ ! -d "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network" ]; then
+    git clone -b adhoc-tst https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network"
+else
+    echo "Repository already cloned, pulling latest changes from 'adhoc-tst' branch..."
+    cd "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network"
+    git checkout adhoc-tst  # Ensure the correct branch
+    git pull origin adhoc-tst  # Pull the latest changes from the 'adhoc-tst' branch
+    cd "$PROJECT_DIR"
+fi
+
+
 # === 3. Set Up the Ad-Hoc Network ===
 echo "📡 Setting up ad hoc Wi-Fi network..."
 
