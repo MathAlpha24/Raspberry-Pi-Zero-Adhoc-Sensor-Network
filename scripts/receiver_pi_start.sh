@@ -15,9 +15,6 @@ if [ ! -d "$VENV_DIR" ]; then
     echo "Virtual environment not found. Creating at $VENV_DIR..."
     python3 -m venv "$VENV_DIR"
     source "$VENV_DIR/bin/activate"
-    echo "Installing Python dependencies..."
-    pip install --upgrade pip
-    pip install adafruit-circuitpython-dht RPI.GPIO
 else
     source "$VENV_DIR/bin/activate"
 fi
