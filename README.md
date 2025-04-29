@@ -2,8 +2,7 @@
 Created for ECE 4990 Celluar Systems CPP Class Project
 
 ## How to Set Up Pi
-Do this first
-
+Update pi
 
 
 
