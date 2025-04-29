@@ -32,7 +32,7 @@ pip install --upgrade pip
 # Copy Project Files
 echo "Copying project files into the project directory..."
 
-# Return to the original script folder (important)
+# Return to the original script folder
 cd -
 
 # Copy everything except any venv that might exist
@@ -80,9 +80,9 @@ iw dev wlan0 info
 # === 4. Run the Python DHT11 Receiver Script ===
 echo "Running DHT11 receiver Python script..."
 
-# Go to the project folder (assumes the receiver Python script is there)
+# Go to the project folder where python script was copied to.
 cd "$PROJECT_DIR"
 python3 dht11_receiver.py
 
-# Optional: deactivate virtual environment after execution
+# Deactivate virtual environment after execution
 deactivate
