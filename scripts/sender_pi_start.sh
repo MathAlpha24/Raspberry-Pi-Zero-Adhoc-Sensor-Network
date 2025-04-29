@@ -52,7 +52,7 @@ echo "Running DHT11 sender Python script..."
 
 GPIO_PIN=${2:-4}  # Default to GPIO 4 if second argument not given
 
-cd "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts"
+cd "$PROJECT_DIR"
 python3 dht11_sender.py --data "$GPIO_PIN"
 
 # === 4. Deactivate the Virtual Environment ===

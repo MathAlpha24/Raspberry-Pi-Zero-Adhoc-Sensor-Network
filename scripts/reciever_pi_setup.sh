@@ -81,8 +81,7 @@ iw dev wlan0 info
 echo "Running DHT11 receiver Python script..."
 
 # Go to the project folder (assumes the receiver Python script is there)
-cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
-
+cd "$PROJECT_DIR"
 python3 dht11_receiver.py
 
 # Optional: deactivate virtual environment after execution

@@ -49,7 +49,7 @@ iw dev wlan0 info
 # === 3. Run the Python DHT11 Reciever Script ===
 echo "Running DHT11 sender Python script..."
 # Go to the project folder (assumes the receiver Python script is there)
-cd Raspberry-Pi-Zero-Adhoc-Sensor-Network
+cd "$PROJECT_DIR"
 
 python3 dht11_receiver.py
 
