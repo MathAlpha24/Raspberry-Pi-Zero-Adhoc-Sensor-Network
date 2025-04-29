@@ -3,6 +3,12 @@
 # Installs dependencies, sets up ad hoc Wi-Fi, and runs the receiver.
 set -e  # Exit on any error
 
+# === 0. Confirm We're in the Correct Folder ===
+if [ ! -f "scripts/dht11_sender.py" ]; then
+    echo " Error: This script must be run from the folder containing the 'scripts/' directory."
+    exit 1
+fi
+
 # === 1. Install Required Libraries ===
 echo "Installing required dependencies..."
 
@@ -29,16 +35,17 @@ source "$VENV_DIR/bin/activate"
 echo "Installing Python packages inside the virtual environment..."
 pip install --upgrade pip
 
-# Clone the project if it's not already in the directory
-if [ ! -d "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network" ]; then
-    git clone -b adhoc-tst https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network"
-else
-    echo "Repository already cloned, pulling latest changes from 'adhoc-tst' branch..."
-    cd "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network"
-    git checkout adhoc-tst  # Ensure the correct branch
-    git pull origin adhoc-tst  # Pull the latest changes from the 'adhoc-tst' branch
-    cd "$PROJECT_DIR"
-fi
+# Copy Project Files
+echo "Copying project files into the project directory..."
+
+# Return to the original script folder (important)
+cd -
+
+# Copy everything except any venv that might exist
+rsync -av --exclude 'venv' ./ "$PROJECT_DIR/"
+
+cd "$PROJECT_DIR"
+
 
 
 # === 3. Set Up the Ad-Hoc Network ===

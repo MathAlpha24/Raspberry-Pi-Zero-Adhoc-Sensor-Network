@@ -3,6 +3,11 @@
 #Creates all dependecies + starts ADHOC and DHT11 data collection
 set -e  # Exit on any error
 
+if [ ! -f "scripts/dht11_sender.py" ]; then
+    echo " Error: This script must be run from the folder containing the 'scripts/' directory."
+    exit 1
+fi
+
 # === 1. Install Required Libraries ===
 echo "Installing required dependencies..."
 
@@ -31,19 +36,18 @@ pip install --upgrade pip
 pip install adafruit-circuitpython-dht
 pip install RPI.GPIO
 
-# ===Clone the Project Repository ===
-echo "Cloning the Raspberry Pi Ad-Hoc Sensor Network repository..."
 
-# Clone the project if it's not already in the directory
-if [ ! -d "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network" ]; then
-    git clone -b adhoc-tst https://github.com/MathAlpha24/Raspberry-Pi-Zero-Adhoc-Sensor-Network.git "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network"
-else
-    echo "Repository already cloned, pulling latest changes from 'adhoc-tst' branch..."
-    cd "$PROJECT_DIR/Raspberry-Pi-Zero-Adhoc-Sensor-Network"
-    git checkout adhoc-tst  # Ensure the correct branch
-    git pull origin adhoc-tst  # Pull the latest changes from the 'adhoc-tst' branch
-    cd "$PROJECT_DIR"
-fi
+# Copy Project Files
+echo "Copying project files into the project directory..."
+
+# Return to the original script folder (important)
+cd -
+
+# Copy everything except any venv that might exist
+rsync -av --exclude 'venv' ./ "$PROJECT_DIR/"
+
+cd "$PROJECT_DIR"
+
 
 
 # === 3. Set Up the Ad-Hoc Network ===

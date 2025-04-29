@@ -2,6 +2,11 @@
 
 set -e  # Exit on any error
 
+if [ ! -f "scripts/dht11_sender.py" ]; then
+    echo " Error: This script must be run from the folder containing the 'scripts/' directory."
+    exit 1
+fi
+
 # === 1. Activate the Virtual Environment ===
 echo "Activating virtual environment..."
 
