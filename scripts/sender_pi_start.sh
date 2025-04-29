@@ -2,19 +2,22 @@
 
 set -e  # Exit on any error
 
-
-# === 1. Activate the Virtual Environment ===
-echo "Activating virtual environment..."
+# === 1. Set Up Virtual Environment ===
+echo "Setting up virtual environment..."
 
 PROJECT_DIR=~/sensor_project
 VENV_DIR=$PROJECT_DIR/venv
 
-if [ ! -d "$VENV_DIR" ]; then
-    echo "Virtual environment not found at $VENV_DIR. Please set it up first."
-    exit 1
-fi
+mkdir -p "$PROJECT_DIR"
+cd "$PROJECT_DIR"
 
-source "$VENV_DIR/bin/activate"
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Virtual environment not found. Creating at $VENV_DIR..."
+    python3 -m venv "$VENV_DIR"
+    source "$VENV_DIR/bin/activate"
+else
+    source "$VENV_DIR/bin/activate"
+fi
 
 # === 2. Set Up the Ad-Hoc Network ===
 echo "📡 Setting up ad hoc Wi-Fi network..."
