@@ -4,8 +4,8 @@
 set -e  # Exit on any error
 
 # === 0. Confirm We're in the Correct Folder ===
-if [ ! -f "scripts/dht11_sender.py" ]; then
-    echo " Error: This script must be run from the folder containing the 'scripts/' directory."
+if [ ! -f "Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts/dht11_sender.py" ]; then
+    echo " Error: This script must be run from the folder containing the 'Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts/' directory."
     exit 1
 fi
 
