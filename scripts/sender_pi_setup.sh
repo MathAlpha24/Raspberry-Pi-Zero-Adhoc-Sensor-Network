@@ -3,14 +3,12 @@
 #Creates all dependecies + starts ADHOC and DHT11 data collection
 set -e  # Exit on any error
 
-
-
 # === 1. Install Required Libraries ===
 echo "Installing required dependencies..."
 
 # Update package list and install necessary tools and libraries
 sudo apt update
-sudo apt install -y python3 python3-venv python3-pip git iw build-essential python3-dev libgpiod2
+sudo apt install -y python3 python3-venv python3-pip git iw build-essential python3-dev libgpiod2 batctl
 
 # === 2. Set Up the Virtual Environment ===
 echo "Setting up virtual environment..."
@@ -33,7 +31,6 @@ pip install --upgrade pip
 pip install adafruit-circuitpython-dht
 pip install RPI.GPIO
 
-
 # Copy Project Files
 echo "Copying project files into the project directory..."
 
@@ -45,10 +42,8 @@ rsync -av --exclude 'venv' ./ "$PROJECT_DIR/"
 
 cd "$PROJECT_DIR"
 
-
-
 # === 3. Set Up the Ad-Hoc Network ===
-echo "📡 Setting up ad hoc Wi-Fi network..."
+echo " Setting up ad hoc Wi-Fi network..."
 
 # Make sure you have the last octet as the first argument
 if [ -z "$1" ]; then
@@ -57,7 +52,8 @@ if [ -z "$1" ]; then
 fi
 
 LAST_OCTET=$1
-IP="192.168.2.$LAST_OCTET/24"
+ADHOC_IP="192.168.2.$LAST_OCTET"
+BATMAN_IP="192.168.199.$LAST_OCTET/24"
 
 # Stop NetworkManager and set up the ad-hoc network
 echo "Stopping NetworkManager..."
@@ -73,17 +69,27 @@ sudo ip link set wlan0 up
 echo "Joining ad hoc network PiAdHocNet on channel 2412..."
 sudo iw wlan0 ibss join PiAdHocNet 2412
 
-# Assign the IP address
-echo "Assigning IP address: $IP"
-sudo ip addr flush dev wlan0
-sudo ip addr add "$IP" dev wlan0
-sudo ip link set wlan0 up
+# === 3. BATMAN-adv Setup ===
+echo "[INFO] Loading BATMAN-adv kernel module..."
+sudo modprobe batman-adv
+echo "batman-adv" | sudo tee -a /etc/modules >/dev/null
 
-echo "wlan0 is up and connected. IP assigned: $IP"
-iw dev wlan0 info
+echo "[INFO] Adding $IFACE to batman-adv..."
+sudo batctl if add "$IFACE"
+sudo ip link set up dev bat0
+sudo ip link set up dev "$IFACE"
+
+echo "[INFO] Assigning IP to bat0 interface..."
+sudo ip addr flush dev bat0
+sudo ip addr add "$BATMAN_IP" dev bat0
+
+echo "[INFO] BATMAN neighbor table:"
+sudo batctl n || true
+echo "[INFO] BATMAN originator table:"
+sudo batctl o || true
 
 # === 4. Run the Python DHT11 Sender Script ===
-echo "📤 Running DHT11 sender Python script..."
+echo " Running DHT11 sender Python script..."
 
 # Default GPIO pin for DHT11 (can be passed as the second argument)
 GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided

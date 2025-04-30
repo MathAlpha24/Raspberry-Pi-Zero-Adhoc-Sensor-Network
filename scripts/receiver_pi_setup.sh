@@ -40,8 +40,6 @@ rsync -av --exclude 'venv' ./ "$PROJECT_DIR/"
 
 cd "$PROJECT_DIR"
 
-
-
 # === 3. Set Up the Ad-Hoc Network ===
 echo "📡 Setting up ad hoc Wi-Fi network..."
 
@@ -52,7 +50,8 @@ if [ -z "$1" ]; then
 fi
 
 LAST_OCTET=$1
-IP="192.168.2.$LAST_OCTET/24"
+ADHOC_IP="192.168.2.$LAST_OCTET/24"
+BATMAN_IP="192.168.199.$LAST_OCTET/24"
 
 # Stop NetworkManager and set up the ad-hoc network
 echo "Stopping NetworkManager..."
@@ -68,16 +67,25 @@ sudo ip link set wlan0 up
 echo "Joining ad hoc network PiAdHocNet on channel 2412..."
 sudo iw wlan0 ibss join PiAdHocNet 2412
 
-# Assign the IP address
-echo "Assigning IP address: $IP"
-sudo ip addr flush dev wlan0
-sudo ip addr add "$IP" dev wlan0
-sudo ip link set wlan0 up
+# === 4. BATMAN-adv Setup ===
+echo "[INFO] Loading BATMAN-adv kernel module..."
+sudo modprobe batman-adv
+echo "batman-adv" | sudo tee -a /etc/modules >/dev/null
 
-echo "wlan0 is up and connected. IP assigned: $IP"
-iw dev wlan0 info
+echo "[INFO] Adding $IFACE to batman-adv..."
+sudo batctl if add "$IFACE"
+sudo ip link set up dev bat0
+sudo ip link set up dev "$IFACE"
 
-# === 4. Run the Python DHT11 Receiver Script ===
+echo "[INFO] Assigning IP to bat0 interface..."
+sudo ip addr flush dev bat0
+sudo ip addr add "$BATMAN_IP" dev bat0
+
+echo "[INFO] BATMAN neighbor table:"
+sudo batctl n || true
+echo "[INFO] BATMAN originator table:"
+sudo batctl o || true
+# === 6. Run the Python DHT11 Receiver Script ===
 echo "Running DHT11 receiver Python script..."
 
 # Go to the project folder where python script was copied to.
