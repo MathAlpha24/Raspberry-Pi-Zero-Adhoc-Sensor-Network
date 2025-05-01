@@ -34,6 +34,14 @@ cd Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts
 ```
 If you need to rejoin the folder location for whatever reason:
 ```
+cd ~/Raspberry-Pi-Zero-Adhoc-Sensor-Network
+git fetch origin
+git checkout -b batman origin/batman #for this branch
+git pull origin batman
+
+```
+##Switching Branches (Testing Purposes)
+```
 cd ~/Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts
 ```
 ## Running the Sender Pi
