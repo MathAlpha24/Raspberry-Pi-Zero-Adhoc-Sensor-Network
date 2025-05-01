@@ -5,7 +5,6 @@ import adafruit_dht
 import board
 import sys
 
-# === Command-line Argument Parser ===
 parser = argparse.ArgumentParser(description="Send DHT11 data over UDP broadcast")
 parser.add_argument("--data", type=int, required=True, help="GPIO pin connected to DHT11 data")
 args = parser.parse_args()
@@ -14,7 +13,7 @@ args = parser.parse_args()
 gpio_map = {
     4: board.D4,
     17: board.D17,
-    # Add more if needed
+    
 }
 
 if args.data not in gpio_map:
@@ -25,7 +24,7 @@ PIN = gpio_map[args.data]
 dhtDevice = adafruit_dht.DHT11(PIN)
 
 # === Network Config ===
-BROADCAST_IP = "192.168.199.255"  # Must match your bat0 subnet
+BROADCAST_IP = "192.168.199.255"  
 PORT = 5005
 
 # === Setup UDP Broadcast Socket ===

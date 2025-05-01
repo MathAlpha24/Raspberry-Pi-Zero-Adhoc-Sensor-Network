@@ -89,7 +89,6 @@ sudo batctl o || true
 # === 5. Run the Python DHT11 Receiver Script ===
 echo "Running DHT11 receiver Python script..."
 
-# Go to the project folder where python script was copied to.
 cd "$PROJECT_DIR"
 python3 dht11_receiver.py
 

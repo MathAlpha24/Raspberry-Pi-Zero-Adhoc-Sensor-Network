@@ -25,7 +25,6 @@ cd "$PROJECT_DIR"
 python3 -m venv "$VENV_DIR"
 source "$VENV_DIR/bin/activate"
 
-# Update pip and install Python dependencies inside the virtual environment
 echo "Installing Python packages inside the virtual environment..."
 pip install --upgrade pip
 pip install adafruit-circuitpython-dht
@@ -94,8 +93,6 @@ echo " Running DHT11 sender Python script..."
 # Default GPIO pin for DHT11 (can be passed as the second argument)
 GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
 
-
-# Go to the script folder and run the sender script
 cd "$PROJECT_DIR"
 python3 dht11_sender.py --data "$GPIO_PIN"
 

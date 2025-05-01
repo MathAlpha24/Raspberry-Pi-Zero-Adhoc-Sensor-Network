@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#Script exists to set up a pi qas receiver
+#Creates all dependecies + starts ADHOC and receiving data collection
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -68,7 +69,6 @@ sudo batctl o || true
 
 # === 4. Run the Python DHT11 Receiver Script ===
 echo "Running DHT11 receiver Python script on GPIO $GPIO_PIN..."
-# Go to the project folder where python script was copied to.
 cd "$PROJECT_DIR"
 python3 dht11_receiver.py
 
