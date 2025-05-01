@@ -6,7 +6,6 @@ IFS=$'\n\t'
 # === Variables ===
 PROJECT_DIR=~/sensor_project
 VENV_DIR="$PROJECT_DIR/venv"
-IFACE="wlan0"
 
 # === 1. Set Up Virtual Environment ===
 echo "Setting up virtual environment..."
@@ -22,7 +21,7 @@ fi
 source "$VENV_DIR/bin/activate"
 
 # === 2. Set Up the Ad-Hoc Network ===
-echo "📡 Setting up ad hoc Wi-Fi network..."
+echo "Setting up ad hoc Wi-Fi network..."
 
 if [ -z "${1:-}" ]; then
     echo "Usage: $0 <last-octet-of-IP> [gpio-pin]"
@@ -67,10 +66,12 @@ echo "[INFO] BATMAN originator table:"
 sudo batctl o || true
 
 
-# === 4. Run the Python DHT11 Sender Script ===
-echo "Running DHT11 sender Python script on GPIO $GPIO_PIN..."
+# === 4. Run the Python DHT11 Receiver Script ===
+echo "Running DHT11 receiver Python script on GPIO $GPIO_PIN..."
+# Go to the project folder where python script was copied to.
 cd "$PROJECT_DIR"
-python3 dht11_receiver.py --data "$GPIO_PIN"
+python3 dht11_receiver.py
+
 
 # === 5. Deactivate Virtual Environment ===
 deactivate

@@ -8,7 +8,7 @@ echo "Installing required dependencies..."
 
 # Update package list and install necessary tools and libraries
 sudo apt update
-sudo apt install -y python3 python3-venv python3-pip git iw build-essential python3-dev libgpiod2
+sudo apt install -y python3 python3-venv python3-pip git iw build-essential python3-dev libgpiod2 batctl
 
 # === 2. Set Up the Virtual Environment ===
 echo "Setting up virtual environment..."
@@ -41,7 +41,7 @@ rsync -av --exclude 'venv' ./ "$PROJECT_DIR/"
 cd "$PROJECT_DIR"
 
 # === 3. Set Up the Ad-Hoc Network ===
-echo "📡 Setting up ad hoc Wi-Fi network..."
+echo "Setting up ad hoc Wi-Fi network..."
 
 # Make sure you have the last octet as the first argument
 if [ -z "$1" ]; then
