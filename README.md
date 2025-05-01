@@ -40,7 +40,7 @@ git checkout -b batman origin/batman #for this branch
 git pull origin batman
 
 ```
-##Switching Branches (Testing Purposes)
+## Switching Branches (Testing Purposes)
 ```
 cd ~/Raspberry-Pi-Zero-Adhoc-Sensor-Network/scripts
 ```
