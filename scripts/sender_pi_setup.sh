@@ -52,7 +52,7 @@ if [ -z "$1" ]; then
 fi
 
 LAST_OCTET=$1
-ADHOC_IP="192.168.2.$LAST_OCTET"
+ADHOC_IP="192.168.2.$LAST_OCTET/24"
 BATMAN_IP="192.168.199.$LAST_OCTET/24"
 
 # Stop NetworkManager and set up the ad-hoc network
@@ -74,10 +74,10 @@ echo "[INFO] Loading BATMAN-adv kernel module..."
 sudo modprobe batman-adv
 echo "batman-adv" | sudo tee -a /etc/modules >/dev/null
 
-echo "[INFO] Adding $IFACE to batman-adv..."
-sudo batctl if add "$IFACE"
+echo "[INFO] Adding wlan0 to batman-adv..."
+sudo batctl if add wlan0
 sudo ip link set up dev bat0
-sudo ip link set up dev "$IFACE"
+sudo ip link set up dev wlan0
 
 echo "[INFO] Assigning IP to bat0 interface..."
 sudo ip addr flush dev bat0
@@ -88,7 +88,7 @@ sudo batctl n || true
 echo "[INFO] BATMAN originator table:"
 sudo batctl o || true
 
-# === 4. Run the Python DHT11 Sender Script ===
+# === 5. Run the Python DHT11 Sender Script ===
 echo " Running DHT11 sender Python script..."
 
 # Default GPIO pin for DHT11 (can be passed as the second argument)

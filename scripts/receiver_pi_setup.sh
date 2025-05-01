@@ -67,15 +67,15 @@ sudo ip link set wlan0 up
 echo "Joining ad hoc network PiAdHocNet on channel 2412..."
 sudo iw wlan0 ibss join PiAdHocNet 2412
 
-# === 4. BATMAN-adv Setup ===
+# === 3. BATMAN-adv Setup ===
 echo "[INFO] Loading BATMAN-adv kernel module..."
 sudo modprobe batman-adv
 echo "batman-adv" | sudo tee -a /etc/modules >/dev/null
 
-echo "[INFO] Adding $IFACE to batman-adv..."
-sudo batctl if add "$IFACE"
+echo "[INFO] Adding wlan0 to batman-adv..."
+sudo batctl if add wlan0
 sudo ip link set up dev bat0
-sudo ip link set up dev "$IFACE"
+sudo ip link set up dev wlan0
 
 echo "[INFO] Assigning IP to bat0 interface..."
 sudo ip addr flush dev bat0
@@ -85,7 +85,8 @@ echo "[INFO] BATMAN neighbor table:"
 sudo batctl n || true
 echo "[INFO] BATMAN originator table:"
 sudo batctl o || true
-# === 6. Run the Python DHT11 Receiver Script ===
+
+# === 5. Run the Python DHT11 Receiver Script ===
 echo "Running DHT11 receiver Python script..."
 
 # Go to the project folder where python script was copied to.

@@ -29,31 +29,33 @@ if [ -z "${1:-}" ]; then
     exit 1
 fi
 
-LAST_OCTET="$1"
-GPIO_PIN="${2:-4}"  # Default GPIO pin is 4
-
+LAST_OCTET=$1
 ADHOC_IP="192.168.2.$LAST_OCTET/24"
 BATMAN_IP="192.168.199.$LAST_OCTET/24"
 
+# Stop NetworkManager and set up the ad-hoc network
 echo "Stopping NetworkManager..."
-sudo systemctl stop NetworkManager || true
-sudo systemctl disable NetworkManager || true
+sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
 
-echo "Configuring $IFACE for ad-hoc mode..."
-sudo ip link set "$IFACE" down
-sudo iw "$IFACE" set type ibss
-sudo ip link set "$IFACE" up
-sudo iw "$IFACE" ibss join PiAdHocNet 2412
+# Bring down and set up wlan0 in IBSS (ad-hoc) mode
+echo "Bringing down wlan0..."
+sudo ip link set wlan0 down
+sudo iw wlan0 set type ibss
+sudo ip link set wlan0 up
+
+echo "Joining ad hoc network PiAdHocNet on channel 2412..."
+sudo iw wlan0 ibss join PiAdHocNet 2412
 
 # === 3. BATMAN-adv Setup ===
 echo "[INFO] Loading BATMAN-adv kernel module..."
 sudo modprobe batman-adv
 echo "batman-adv" | sudo tee -a /etc/modules >/dev/null
 
-echo "[INFO] Adding $IFACE to batman-adv..."
-sudo batctl if add "$IFACE"
+echo "[INFO] Adding wlan0 to batman-adv..."
+sudo batctl if add wlan0
 sudo ip link set up dev bat0
-sudo ip link set up dev "$IFACE"
+sudo ip link set up dev wlan0
 
 echo "[INFO] Assigning IP to bat0 interface..."
 sudo ip addr flush dev bat0
@@ -63,6 +65,7 @@ echo "[INFO] BATMAN neighbor table:"
 sudo batctl n || true
 echo "[INFO] BATMAN originator table:"
 sudo batctl o || true
+
 
 # === 4. Run the Python DHT11 Sender Script ===
 echo "Running DHT11 sender Python script on GPIO $GPIO_PIN..."
