@@ -67,8 +67,11 @@ echo "[INFO] BATMAN originator table:"
 sudo batctl o || true
 
 
-# === 4. Run the Python DHT11 Sender Script ===
-echo "Running DHT11 sender Python script on GPIO $GPIO_PIN..."
+# Default GPIO pin for DHT11 (can be passed as the second argument)
+GPIO_PIN=${2:-4}  # Default to GPIO 4 if not provided
+
+
+# Go to the script folder and run the sender script
 cd "$PROJECT_DIR"
 python3 dht11_sender.py --data "$GPIO_PIN"
 
